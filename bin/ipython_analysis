@@ -1,0 +1,95 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+This script will analyze your recent IPython commands and determine some
+suggestions for you to add to your own startup scripts.
+"""
+from __future__ import print_function
+
+
+from pprint import pprint
+from collections import Counter
+import os
+import re
+
+import sqlite3
+import pandas as pd
+from IPython.utils.path import get_ipython_dir
+
+IPYTHON_HOME = get_ipython_dir()
+PROFILE = 'profile_default'
+
+conn = sqlite3.connect('%s/%s/history.sqlite'%(IPYTHON_HOME, PROFILE))
+cursor = conn.cursor()
+
+
+def query(q):
+    resultset = cursor.execute(q)
+    columns = [_[0] for _ in cursor.description]
+    return pd.DataFrame( cursor.fetchall(), columns = columns )
+
+def detect_from_import(line):
+    regex = """(from|import)\s(\D*?)(\s(import|as).*)?$"""
+    v = re.match(regex, line )
+    if v:
+        return line
+    return None
+
+def recommend_imports(df):
+    imports = df.apply(detect_from_import)
+    top_imports = imports.value_counts().iloc[:15]
+    print("""We recommend adding the following imports to the startup file '~/.ipython/startup/00-imports.py'""")
+    print(top_imports.to_string())
+    return
+
+
+def parse_import(line):
+    regex = """(from|import)\s(\D*?)(\s(import|as).*)?$"""
+    lines = line.split("\n")
+    imports = []
+    for line in lines:
+        v = re.match(regex, line )
+        if v:
+            imports.append(v.groups()[1].strip().split(".")[0])
+    return imports if imports else None
+
+def parse_assignments(line):
+    regex = """\A(\w*)\s?=\s?.*"""
+    lines = line.split("\n")
+    assignment_variables = []
+    for line in lines:
+        v = re.match(regex, line )
+        if v:
+            assignment_variables.append(v.groups()[0].strip())
+    return assignment_variables if assignment_variables else None
+
+
+if __name__=="__main__":
+    q = """SELECT source_raw FROM history"""
+    df = query(q)['source_raw']
+
+    print("Most common imports:")
+    imports = df.apply(parse_import).dropna().sum()
+    counter = Counter(imports)
+    pprint(counter.most_common(20))
+
+    print()
+    print("Most common assignment variables:")
+    ass = df.apply(parse_assignments).dropna().sum()
+    counter = Counter(ass)
+    pprint(counter.most_common(20))
+
+    print()
+    print("Most common lines:")
+    counter = Counter(df.values)
+    pprint(counter.most_common(20))
+
+    print()
+    print("Most common prefixes:")
+    counter = Counter(map(lambda r: r[:10], df.values))
+    pprint(counter.most_common(20))
+
+    print()
+    recommend_imports(df)
+

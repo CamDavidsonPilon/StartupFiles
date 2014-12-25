@@ -1,0 +1,77 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+This script will create a symlink for your default ipython profile startup scripts to this repo. 
+
+"""
+from __future__ import print_function
+
+import sys
+import os
+import shutil
+
+from IPython.utils.path import get_ipython_dir
+from IPython.core.profiledir import ProfileDir, ProfileDirError
+
+
+IPYTHON_DIR = get_ipython_dir()
+
+def create_profile_and_startup_folder(ipython_dir, profile_name):
+    dir_to_create = profile_dir(ipython_dir, profile_name)
+    os.makedirs(dir_to_create)
+    print("creating %s"%dir_to_create)
+    return
+
+
+def profile_exists(ipython_dir, profile_name):
+    try:
+        ProfileDir.find_profile_dir_by_name(ipython_dir, name=profile_name)
+        return True
+    except ProfileDirError:
+        return False
+
+def profile_dir(ipython_dir, profile_name):
+    return os.path.join(ipython_dir, 'profile_' + profile_name)
+
+def startup_dir(ipython_dir, profile_name):
+    return os.path.join(profile_dir(ipython_dir, profile_name), 'startup')
+
+def clear_profile_startups(ipython_dir, profile_name):
+    dir_to_rm = startup_dir(ipython_dir, profile_name)
+    print("removing %s"%dir_to_rm)
+    try:
+        shutil.rmtree(dir_to_rm)
+    except OSError:
+        os.unlink(dir_to_rm)
+    return
+
+def create_symlink(ipython_dir, profile_name):
+    startup_source = os.path.join(os.getcwd(), 'startup')
+    startup_dest = startup_dir(ipython_dir, profile_name)
+    os.symlink(startup_source, startup_dest)
+    print("%s is now symlinked to %s"%(startup_dest, startup_source))
+    return
+
+
+if __name__=="__main__":
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-p', '--profile', help="Create a specific profile.",
+                        type=str, default='default')
+    args = parser.parse_args()
+    profile = args.profile
+
+    if profile_exists(IPYTHON_DIR, profile):
+        input = raw_input("""Profile %s exists. This script will delete any startup scripts currently in %s. Are you sure you wish to continue? Y/n """\
+            %(profile, startup_dir(IPYTHON_DIR, profile))).strip()
+        if input != 'Y':
+            print("Exiting.")
+            sys.exit()
+        clear_profile_startups(IPYTHON_DIR, profile)
+    else:
+        print("Profile %s will be created."%profile)
+        create_profile_and_startup_folder(IPYTHON_DIR, profile)
+
+
+    create_symlink(IPYTHON_DIR, profile)

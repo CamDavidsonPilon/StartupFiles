@@ -1,0 +1,8 @@
+# ipython scripts
+
+@register_line_magic
+def autoreload(line):
+    %load_ext autoreload
+    %autoreload 2
+
+del autoreload

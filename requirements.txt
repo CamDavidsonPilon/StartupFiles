@@ -1,0 +1,7 @@
+ipython
+numpy
+pandas
+sqlite3
+db.py
+matplotlib
+lifelines
