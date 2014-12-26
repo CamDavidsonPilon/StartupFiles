@@ -6,6 +6,7 @@
 
 # edit as needed... 
 # PYTHON_MODULES_DIR_LIST = [os.path.join(os.path.expandvars('$HOME'),'DIRECTORY_NAME')]
+PYTHON_MODULES_DIR_LIST = []
 
 import os
 import sys
