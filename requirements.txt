@@ -3,5 +3,5 @@ numpy
 pandas
 sqlite3
 db.py
-matplotlib
+matplotlib>=1.4
 lifelines

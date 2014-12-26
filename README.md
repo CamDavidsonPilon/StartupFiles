@@ -25,7 +25,7 @@ This repo contains my IPython startup files that I've found to be timesaving for
 
 #### First, who is this for?
 
-My startup scripts are focused on data analysis and prototyping enviroments, as this is my primary purpose for using Python and IPython. I have lots of examples of in the `startup` script folder that can be used for a starting place for other IPython workflows. 
+My startup scripts are focused on data analysis and prototyping enviroments, as this is my primary purpose for using Python and IPython. I have lots of examples in the `startup` folder that can be used as ag starting place for other IPython workflows. 
 
 
 #### Installation
