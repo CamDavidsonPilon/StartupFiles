@@ -27,6 +27,7 @@ This repo contains my IPython startup files that I've found to be timesaving for
 
 My startup scripts are focused on data analysis and prototyping enviroments, as this is my primary purpose for using Python and IPython. I have lots of examples in the `startup` folder that can be used as ag starting place for other IPython workflows. 
 
+There is a `requirements.txt` file because some of my imports are external libraries.
 
 #### Installation
 
@@ -51,7 +52,6 @@ will replace the `default` profile's `startup` with symlinks to the local repo. 
 ```
 to use an different profile to symlink too. 
 
-There is a `requirements.txt` file because some of my imports are external libraries.
 
 #### Building your own
 
