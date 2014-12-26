@@ -21,4 +21,8 @@ def psat(lint):
 def psate(line):
      _ip.magics_manager.magics['line']['paste']()
 
-del past, pase, pate, psat, psate
+@register_line_magic
+def pasta(line):
+     _ip.magics_manager.magics['line']['paste']()
+
+del past, pase, pate, psat, psate, pasta
