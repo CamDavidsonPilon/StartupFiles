@@ -1,7 +1,8 @@
 # nice plotting functions.
 
-# %pyplot
+# %pyplot, %plt, %plot
 @register_line_magic('plt')
+@register_line_magic('plot') #this is just alias: if I type plot, I better plot. 
 @register_line_magic('pyplot')
 def _pyplot(line):
     _ip.run_line_magic('matplotlib', line)
