@@ -1,8 +1,9 @@
 # nice plotting functions.
 
 # %pyplot
-@register_line_magic
-def pyplot(line):
+@register_line_magic('plt')
+@register_line_magic('pyplot')
+def _pyplot(line):
     _ip.run_line_magic('matplotlib', line)
     _ip.run_code("""from matplotlib import pyplot as plt""")
 
@@ -31,4 +32,4 @@ def pyplot(line):
     _ip.user_ns['plot'] = plt.plot
     _ip.user_ns['subplot'] = plt.subplot
 
-del pyplot
+del _pyplot
