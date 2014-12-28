@@ -1,7 +1,6 @@
 # ipython scripts
 
 @register_line_magic('autoreload')
-@register_line_magic('reload')
 def _autoreload(line):
     %load_ext autoreload
     %autoreload 2
