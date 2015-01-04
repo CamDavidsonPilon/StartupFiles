@@ -4,6 +4,7 @@
 @register_line_magic('plt')
 @register_line_magic('plot') #this is just alias: if I type plot, I better plot. 
 @register_line_magic('pyplot')
+@register_line_magic('pyploy') #common mispelling I make
 def _pyplot(line):
     _ip.run_line_magic('matplotlib', line)
     _ip.run_code("""from matplotlib import pyplot as plt""")
@@ -11,10 +12,6 @@ def _pyplot(line):
     # use Bayesian Methods for Hackers plotting style
     _ip.run_code("""plt.style.use('bmh')""")
 
-    # using `inline` in a notebook will resets the savefig dpi. 
-    plt.rcParams['savefig.dpi'] = 200
-    plt.rcParams['figure.dpi'] = 200
-    
     # better hists
     def hist_(*args, **kwargs):
         kwargs.pop('alpha', None)
