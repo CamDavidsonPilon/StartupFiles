@@ -5,3 +5,4 @@ sqlite3
 db.py
 matplotlib>=1.4
 lifelines
+line_profiler
