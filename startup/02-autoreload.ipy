@@ -1,7 +1,7 @@
 # ipython scripts
 
 %load_ext line_profiler
-% ex: %lprun -f function function(awdwad)
+# ex: %lprun -f function function(awdwad)
 
 @register_line_magic('autoreload')
 def _autoreload(line):
